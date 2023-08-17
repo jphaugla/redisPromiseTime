@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.text.ParseException;
+
 @RestController
 public class DemoController {
 
@@ -16,7 +18,7 @@ public class DemoController {
     private OrderStreamProducer eventProducer;
 
     @PostMapping("/produce")
-    public RecordId produceEvent(@RequestBody OrderEvent orderEvent) throws JsonProcessingException {
+    public RecordId produceEvent(@RequestBody OrderEvent orderEvent) throws JsonProcessingException, ParseException {
        return eventProducer.produce(orderEvent);
     }
 }

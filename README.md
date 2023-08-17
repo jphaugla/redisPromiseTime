@@ -1,17 +1,80 @@
-# Related Tutorials
+# redisPromiseTime
+Tracks success based on promise time compared with verification time at facilities
 
-Code for stream process all came for here
-* [Stream Processing with Redis and Spring Boot Data](https://howtodoinjava.com/spring-data/redis-streams-processing/)
+## Outline
 
-This github has a producer and a consumer using a common record structure to produce events and write these events to redis.
+## Overview
+Tracks success based on promise time compared with verification time at facilities using a redis streams producer and a consumer.
+Solution using java spring boot leverage redis hash and redis sorted sets to arrive at a success metrics per store and queue.  
+The producer and the consumer share a common record structure to hold the events.
 
-The events are worker order events with a facility id, work order for the facility, work queue and two dates:  promise time and verification time.
+These are the data structures used
+![](images/redisDataStructures.png)
 
-Redis will hold all the work orders in raw fashion but additionally will use sorted sets and increments to provide real time metrics on the work orders including success or failure at work orders meeting the promise date.
+## Important Links/NotesLinks
+* [Stream Processing with Redis and Spring Boot Data Blog](https://howtodoinjava.com/spring-data/redis-streams-processing/)
+* [Majority of this code stolen from here](https://github.com/lokeshgupta1981/Spring-Boot-Examples/tree/master/spring-redis-streams)
+* [Instructive spring boot overview](https://howtodoinjava.com/spring-data/spring-boot-redis-with-lettuce-jedis/)
+* [redis stack](https://developer.redis.com/create/redis-stack)
+* [redis sorted sets](https://redis.io/docs/data-types/sorted-sets/)
 
-| Logical Name    | Naming                                 | Example Name                        | Type                                          | Description                                                               | Used For                                                                |
-|-----------------|----------------------------------------|-------------------------------------|-----------------------------------------------|---------------------------------------------------------------------------|-------------------------------------------------------------------------|
-| Order Promise   | Order:<facility>:<workorder>:<promise> | Order:028219:1:2023-05-06 12:30:30	 | Hash                                          | Contains full information for each order event                            | Keep detail information from every promised work order                  |
-| Unfilled Order  | Unfilled:<facility>:<queue>	           | Unfilled:028219:QV1	                | Sorted set	                                   | Value is worker with score of promise date	                               | For each store and queue can retrieve workorders sorted by promise date |
-| Filled Order	   | Filled:<facility>:<queue>              | 	Filled:028219:QV1	                 | Sorted set	Value is key for the order promise | Score is promise date.	Index into the Order Promise table by promise date |                                                                         |
-| Store Success 	 | Success:<facility>                     | 	Success:028219	                    | Hash                                          | 	Success and Failure Counter for each store                               | 	retrieve number of successes and failure by store                      |
+# Instructions
+### Create environment
+Clone the github
+```bash 
+get clone https://github.com/jphaugla/redisPromiseTime.git
+```
+### Start redis with docker
+```bash
+docker-compose up -d 
+```
+### Build application
+```bash
+mvn clean package
+```
+
+### Starting the application
+
+* Start the consumer in one terminal session
+```bash
+cd stream-event-consumer
+java -jar target/stream-event-consumer-0.0.1-SNAPSHOT.jar
+```
+* Start the producer in a different terminal session
+```bash
+cd stream-event-producer
+java -jar target/stream-event-producer-0.0.1-SNAPSHOT.jar
+```
+
+### Using the application
+A scripts directory has two subdirectories:  consumer, producter
+
+#### producer
+The scripts here produce records.  A basic workflow starts with a promise record with no verification date and continues 
+with the fulfillment of this promise record.  Will see the unfilled order data structure after the promise record be removed
+when the fulfillment occurs.
+```bash
+cd producer
+./orderNull.sh
+# observer structures using redisinsight before running fulfillment
+./orderFulfilled.sh
+```
+Continue by populating additional records
+```bash
+./sameStore.sh 
+./multipleOrders.sh
+```
+
+#### consumer
+The scripts provide interface to retrieve answers from the generated data
+```bash
+# check status 
+./status.sh
+# get status of one store
+./getStoreStatus.sh
+# get all store status statistics
+./getAllSstoreStatus.sh
+```
+
+Obser
+

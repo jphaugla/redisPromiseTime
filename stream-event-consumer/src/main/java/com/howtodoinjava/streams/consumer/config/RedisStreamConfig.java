@@ -1,5 +1,6 @@
 package com.howtodoinjava.streams.consumer.config;
 
+import com.howtodoinjava.streams.consumer.service.OrderService;
 import com.howtodoinjava.streams.consumer.service.OrderStreamListener;
 import com.howtodoinjava.streams.model.OrderEvent;
 import lombok.RequiredArgsConstructor;
@@ -33,6 +34,10 @@ public class RedisStreamConfig {
   public StreamListener<String, ObjectRecord<String, OrderEvent>> orderStreamListener() {
     // handle message from stream
     return new OrderStreamListener();
+  }
+  @Bean
+  public OrderService orderService() {
+    return new OrderService();
   }
 
   @Bean
