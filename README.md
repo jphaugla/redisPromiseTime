@@ -2,6 +2,14 @@
 Tracks success based on promise time compared with verification time at facilities
 
 ## Outline
+- [Overview](#overview)
+- [Important Links](#important-links)
+- [Instructions](#instructions)
+  - [Create the environment](#create-environment)
+  - [Start redis with Docker](#start-redis-with-docker)
+  - [Build Application](#build-application)
+  - [Start Application](#start-application)
+  - [Use Application](#use-application)
 
 ## Overview
 Tracks success based on promise time compared with verification time at facilities using a redis streams producer and a consumer.
@@ -11,7 +19,7 @@ The producer and the consumer share a common record structure to hold the events
 These are the data structures used
 ![](images/redisDataStructures.png)
 
-## Important Links/NotesLinks
+## Important Links
 * [Stream Processing with Redis and Spring Boot Data Blog](https://howtodoinjava.com/spring-data/redis-streams-processing/)
 * [Majority of this code stolen from here](https://github.com/lokeshgupta1981/Spring-Boot-Examples/tree/master/spring-redis-streams)
 * [Instructive spring boot overview](https://howtodoinjava.com/spring-data/spring-boot-redis-with-lettuce-jedis/)
@@ -33,7 +41,7 @@ docker-compose up -d
 mvn clean package
 ```
 
-### Starting the application
+### Start application
 
 * Start the consumer in one terminal session
 ```bash
@@ -46,7 +54,7 @@ cd stream-event-producer
 java -jar target/stream-event-producer-0.0.1-SNAPSHOT.jar
 ```
 
-### Using the application
+### Use application
 A scripts directory has two subdirectories:  consumer, producter
 
 #### producer
@@ -75,6 +83,4 @@ The scripts provide interface to retrieve answers from the generated data
 # get all store status statistics
 ./getAllSstoreStatus.sh
 ```
-
-Obser
 
