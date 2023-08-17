@@ -81,6 +81,6 @@ The scripts provide interface to retrieve answers from the generated data
 # get status of one store
 ./getStoreStatus.sh
 # get all store status statistics
-./getAllSstoreStatus.sh
+./getAllStoreStatus.sh
 ```
 
