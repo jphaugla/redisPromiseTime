@@ -45,11 +45,14 @@ public class OrderEvent {
     }
 
     public static String getKeyNameFullVerif(String inFacilityId, String inQueue) {
-        return ("FullStoreVerif:" + inFacilityId + ":" + inQueue);
+        return (getKeyNameFullVerif(inFacilityId + ":" + inQueue));
     }
 
     public static String getKeyNameAllStores() {
         return ("AllStores");
     }
 
+    public static String getKeyNameFullVerif(String storeQueue) {
+        return ("FullStoreVerif:" + storeQueue);
+    }
 }

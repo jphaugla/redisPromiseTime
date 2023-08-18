@@ -14,7 +14,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import com.howtodoinjava.streams.model.OrderEvent;
 
 @Slf4j
 @Service
@@ -30,11 +29,15 @@ public class OrderService {
         return(redisTemplate.opsForHash().
                 entries(OrderEvent.getKeyNameStoreSuccess(facilityId, queue)));
     }
+    // get all stores in a set
+    public Set<String> getAllStores() {
+        return redisTemplate.opsForZSet().range(OrderEvent.getKeyNameAllStores(), 0, Double.valueOf(Double.POSITIVE_INFINITY).longValue());
+    }
     //  return the success metrics for all the facilities
     public List<Map<Object, Object>> getAllFacilitySuccess() {
         Map<Object, Object> storeEntries;
         List<Map<Object, Object>> storeSuccessList = new ArrayList<Map<Object, Object>>();
-        Set<String> stores = redisTemplate.opsForZSet().range(OrderEvent.getKeyNameAllStores(), 0, Double.valueOf(Double.POSITIVE_INFINITY).longValue());
+        Set<String> stores = getAllStores();
         assert stores != null;
         for ( String storeQueueKey : stores) {
             String storeKey = OrderEvent.getKeyNameStoreSuccess(storeQueueKey);
@@ -116,4 +119,19 @@ public class OrderService {
     }
 
 
+    public Set<String> recentStoreOrders(String inFacilityId, String inQueue, String startTime, String endTime) throws ParseException {
+        long startMillis = Long.parseLong(startTime);
+        long endMillis = Long.parseLong(endTime);
+        log.info("in recentStoreOrders store=" + inFacilityId + " queue=" + inQueue + " start=" + startTime + " end=" + endTime);
+        Set<String> stores = redisTemplate.opsForZSet().rangeByScore(OrderEvent.getKeyNameFullVerif(inFacilityId, inQueue), startMillis, endMillis);
+        return stores;
+    }
+
+    public Set<String> recentStoreOrders(String storeQueue, String startTime, String endTime) {
+        long startMillis = Long.parseLong(startTime);
+        long endMillis = Long.parseLong(endTime);
+        log.info("in recentStoreOrders store=" + storeQueue + " start=" + startTime + " end=" + endTime);
+        Set<String> stores = redisTemplate.opsForZSet().rangeByScore(OrderEvent.getKeyNameFullVerif(storeQueue), startMillis, endMillis);
+        return stores;
+    }
 }

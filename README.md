@@ -87,6 +87,10 @@ The scripts provide interface to retrieve answers from the generated data
 ./getStoreStatus.sh
 # get all store status statistics
 ./getAllStoreStatus.sh
+# get recent store sales passing store, queue, start time and end time
+./recentStoreSales.sh
+# get list of all stores and queues 
+./allStoreList.sh
 
 ```
 Additional feature, rebuild the store success status
@@ -98,5 +102,7 @@ Additional feature, rebuild the store success status
 ./rebuildStoreStatus.sh
 ```
 Verify the same values returned
+
+
 
 
