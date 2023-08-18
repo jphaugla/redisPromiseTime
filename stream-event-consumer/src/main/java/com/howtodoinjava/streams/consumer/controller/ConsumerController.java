@@ -31,6 +31,12 @@ public class ConsumerController {
         return orderService.getAllFacilitySuccess();
     }
 
+    @GetMapping("/rebuildStoreSuccess")
+    public String rebuildSuccessStats(@RequestParam String store, @RequestParam String queue) {
+        orderService.rebuildSuccessStats(store, queue);
+        return "Done";
+    }
+
 
     @PostConstruct
     private void init() {

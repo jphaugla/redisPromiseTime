@@ -1,1 +1,1 @@
-curl -X GET -H "Content-Type: application/json" 'http://localhost:5001/allStoreSuccess'
+curl -X GET -H "Content-Type: application/json" 'http://localhost:8082/allStoreSuccess'

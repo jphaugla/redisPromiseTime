@@ -37,7 +37,12 @@ get clone https://github.com/jphaugla/redisPromiseTime.git
 docker-compose up -d 
 ```
 ### Build application
+* first, build the commmon-event-model
+* next, build the full project
 ```bash
+cd common-event-model
+mvn clean package
+cd ..
 mvn clean package
 ```
 
@@ -82,5 +87,16 @@ The scripts provide interface to retrieve answers from the generated data
 ./getStoreStatus.sh
 # get all store status statistics
 ./getAllStoreStatus.sh
+
 ```
+Additional feature, rebuild the store success status
+* Go into redis insight or redis-cli 
+* Observe the value for the key StoreSuccess:3333:QV1
+  * It should have 3 LATE and 2 SUCCESS
+* Delete the key StoreSuccess:3333:QV1
+```bash
+./rebuildStoreStatus.sh
+```
+Verify the same values returned
+
 
